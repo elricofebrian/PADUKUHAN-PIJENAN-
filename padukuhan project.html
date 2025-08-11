@@ -1,0 +1,2518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Padukuhan Pijenan</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2E7D32">
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-green: #2E7D32;
+            --primary-green-light: #66BB6A;
+            --primary-green-dark: #1B5E20;
+            --secondary-blue: #1976D2;
+            --secondary-orange: #FF8F00;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --text-disabled: #BDBDBD;
+            --background: #FAFAFA;
+            --surface: #FFFFFF;
+            --divider: #E0E0E0;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --info: #2196F3;
+            --chat-sent: #E3F2FD;
+            --chat-received: #F5F5F5;
+            --chat-system: #FFF3E0;
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            background-color: var(--background);
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+        h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.75rem; }
+        h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+        p { margin-bottom: 1rem; }
+        small { font-size: 0.75rem; color: var(--text-secondary); }
+
+        /* Layout Components */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .header-text h1 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .header-text p {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            text-align: center;
+        }
+
+        .splash-screen .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+            font-size: 3rem;
+        }
+
+        .splash-screen h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .splash-screen p {
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-height: 44px;
+            padding: 0 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-green-dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-blue);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-block {
+            width: 100%;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            min-height: 48px;
+            padding: 0 1rem;
+            border: 2px solid var(--divider);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .form-select {
+            width: 100%;
+            min-height: 48px;
+            padding: 0 1rem;
+            border: 2px solid var(--divider);
+            border-radius: 6px;
+            font-size: 1rem;
+            background: white;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--divider);
+            display: flex;
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.75rem 0.5rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+            font-size: 0.75rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-green);
+        }
+
+        .nav-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* User Level Badges */
+        .user-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-level-1 {
+            background: #D32F2F;
+            color: white;
+        }
+
+        .badge-level-2 {
+            background: #1976D2;
+            color: white;
+        }
+
+        .badge-level-3 {
+            background: #388E3C;
+            color: white;
+        }
+
+        .badge-level-4 {
+            background: #F57C00;
+            color: white;
+        }
+
+        .badge-level-5 {
+            background: #757575;
+            color: white;
+        }
+
+        /* News Cards */
+        .news-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, var(--divider), #f0f0f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--text-disabled);
+        }
+
+        .news-content {
+            padding: 1rem;
+        }
+
+        .news-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .news-excerpt {
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .news-category {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            background: var(--primary-green);
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        /* Chat Styles */
+        .chat-container {
+            padding: 1rem;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-message.sent {
+            align-items: flex-end;
+        }
+
+        .chat-message.received {
+            align-items: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.75rem;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+
+        .message-bubble.sent {
+            background: var(--chat-sent);
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-bubble.received {
+            background: var(--chat-received);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-info {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .chat-input-container {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--divider);
+            padding: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            min-height: 44px;
+            padding: 0 1rem;
+            border: 1px solid var(--divider);
+            border-radius: 22px;
+            resize: none;
+        }
+
+        /* Donation Progress */
+        .donation-progress {
+            background: var(--divider);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-green), var(--success));
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .donation-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Aspirasi Status */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-new { background: var(--info); color: white; }
+        .status-review { background: var(--warning); color: white; }
+        .status-process { background: var(--secondary-blue); color: white; }
+        .status-done { background: var(--success); color: white; }
+        .status-rejected { background: var(--error); color: white; }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--divider);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 1rem;
+        }
+
+        .modal-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--divider);
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* Loading States */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            border: 3px solid var(--divider);
+            border-top: 3px solid var(--primary-green);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 0.75rem;
+            }
+            
+            .header {
+                padding: 0.75rem 0;
+            }
+            
+            .logo {
+                width: 35px;
+                height: 35px;
+            }
+            
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.25rem; }
+        }
+
+        /* Footer */
+        .app-footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 2rem 0 1rem;
+            text-align: center;
+        }
+
+        .copyright {
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .copyright strong {
+            color: var(--primary-green-light);
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--error);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 90px;
+            right: 1rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 90;
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @media (max-width: 480px) {
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .mb-0 { margin-bottom: 0; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .p-1 { padding: 0.5rem; }
+        .p-2 { padding: 1rem; }
+        .d-none { display: none; }
+        .d-block { display: block; }
+        .d-flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .align-center { align-items: center; }
+        .gap-1 { gap: 0.5rem; }
+        .gap-2 { gap: 1rem; }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="logo">🏘️</div>
+        <h2>PADUKUHAN PIJENAN</h2>
+        <p>Dikembangkan oleh <strong>ELRICO FEBRIAN</strong></p>
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Login Page -->
+    <div class="page active" id="loginPage">
+        <div class="container">
+            <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+                <div class="card" style="width: 100%; max-width: 400px;">
+                    <div class="text-center mb-2">
+                        <div class="logo" style="margin: 0 auto 1rem;">🏘️</div>
+                        <h2>Selamat Datang</h2>
+                        <p>Padukuhan Pijenan</p>
+                    </div>
+                    
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label class="form-label">Nomor HP</label>
+                            <input type="tel" class="form-input" id="loginPhone" placeholder="+62812345678xx" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-input" id="loginPassword" placeholder="Masukkan password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+                        
+                        <div class="text-center mt-2">
+                            <p><small>Belum punya akun? <a href="#" onclick="showRegister()" style="color: var(--primary-green);">Daftar di sini</a></small></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div class="page" id="registerPage">
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <button onclick="showLogin()" style="background: none; border: none; color: white; font-size: 1.5rem;">←</button>
+                    <h1>Pendaftaran</h1>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container" style="padding-top: 2rem;">
+            <form id="registerForm">
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" class="form-input" id="regName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nomor HP</label>
+                    <input type="tel" class="form-input" id="regPhone" placeholder="+62812345678xx" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="regPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">RT</label>
+                    <select class="form-select" id="regRT" required>
+                        <option value="">Pilih RT</option>
+                        <option value="01">RT 01</option>
+                        <option value="02">RT 02</option>
+                        <option value="03">RT 03</option>
+                        <option value="04">RT 04</option>
+                        <option value="05">RT 05</option>
+                        <option value="06">RT 06</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Alamat Lengkap</label>
+                    <textarea class="form-input" id="regAddress" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tanggal Lahir</label>
+                    <input type="date" class="form-input" id="regBirthDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Jenis Kelamin</label>
+                    <select class="form-select" id="regGender" required>
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="L">Laki-laki</option>
+                        <option value="P">Perempuan</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Pekerjaan</label>
+                    <input type="text" class="form-input" id="regJob" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">Daftar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div class="page" id="dashboardPage">
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <div class="logo">🏘️</div>
+                        <div class="header-text">
+                            <h1>Padukuhan Pijenan</h1>
+                            <p>Selamat datang, <span id="userNameDisplay">User</span></p>
+                        </div>
+                    </div>
+                    <div class="user-badge" id="userBadge">
+                        <span>👤</span>
+                        <span>Warga</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="padding-top: 2rem;">
+            <!-- Quick Stats -->
+            <div class="grid grid-2 mb-2">
+                <div class="card text-center">
+                    <h3 style="color: var(--primary-green);">5</h3>
+                    <p class="mb-0">Berita Terbaru</p>
+                </div>
+                <div class="card text-center">
+                    <h3 style="color: var(--secondary-blue);">12</h3>
+                    <p class="mb-0">Kegiatan Bulan Ini</p>
+                </div>
+            </div>
+
+            <!-- Berita Terbaru -->
+            <div class="card">
+                <h3>📰 Berita Terbaru</h3>
+                <div id="latestNews">
+                    <div class="news-card">
+                        <div class="news-image">📸</div>
+                        <div class="news-content">
+                            <div class="news-category">Kebijakan</div>
+                            <h4 class="news-title">Program Bantuan Sosial Tahun 2024</h4>
+                            <p class="news-excerpt">Pemerintah meluncurkan program bantuan sosial untuk meningkatkan kesejahteraan masyarakat...</p>
+                            <div class="news-meta">
+                                <span>👑 Kepala Padukuhan</span>
+                                <span>2 jam lalu</span>
+                                <span>👁️ 45</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-outline btn-block" onclick="showPage('beritaPage')">Lihat Semua Berita</button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <h3>🚀 Aksi Cepat</h3>
+                <div class="grid grid-2">
+                    <button class="btn btn-primary" onclick="showPage('aspirasiPage')">
+                        💬 Kirim Aspirasi
+                    </button>
+                    <button class="btn btn-secondary" onclick="showPage('donasiPage')">
+                        💝 Donasi
+                    </button>
+                    <button class="btn btn-outline" onclick="showPage('chatPage')">
+                        💭 Chat Grup
+                    </button>
+                    <button class="btn btn-outline" onclick="emergency()">
+                        🚨 Emergency
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kegiatan Mendatang -->
+            <div class="card">
+                <h3>📅 Kegiatan Mendatang</h3>
+                <div class="event-item mb-1">
+                    <div class="d-flex justify-between align-center">
+                        <div>
+                            <strong>Gotong Royong RT 01</strong>
+                            <p class="mb-0"><small>Minggu, 15 Des 2024 - 07:00</small></p>
+                        </div>
+                        <button class="btn btn-outline" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Ikut</button>
+                    </div>
+                </div>
+                <div class="event-item">
+                    <div class="d-flex justify-between align-center">
+                        <div>
+                            <strong>Rapat RT 02</strong>
+                            <p class="mb-0"><small>Senin, 16 Des 2024 - 19:00</small></p>
+                        </div>
+                        <button class="btn btn-outline" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Ikut</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Berita Page -->
+    <div class="page" id="beritaPage">
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <div class="logo">📰</div>
+                        <div class="header-text">
+                            <h1>Berita & Informasi</h1>
+                            <p>Stay updated with latest news</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="showCreateNews()" id="createNewsBtn" style="display: none; padding: 0.5rem;">➕</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="padding-top: 2rem;">
+            <!-- Search & Filter -->
+            <div class="card">
+                <div class="form-group mb-1">
+                    <input type="text" class="form-input" id="newsSearch" placeholder="🔍 Cari berita...">
+                </div>
+                <select class="form-select" id="newsFilter">
+                    <option value="">Semua Kategori</option>
+                    <option value="kebijakan">🏛️ Kebijakan Pemerintah</option>
+                    <option value="kondisi_negara">🇮🇩 Kondisi Negara</option>
+                    <option value="rencana_negara">🏗️ Rencana Pembangunan</option>
+                    <option value="cuaca">🌤️ Prakiraan Cuaca</option>
+                    <option value="himbauan">⚠️ Himbauan Penting</option>
+                    <option value="acara">📅 Info Acara/Kegiatan</option>
+                    <option value="keagamaan">🕌 Informasi Keagamaan</option>
+                </select>
+            </div>
+
+            <!-- News List -->
+            <div id="newsList">
+                <!-- News items will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Page -->
+    <div class="page" id="chatPage">
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <div class="logo">💭</div>
+                        <div class="header-text">
+                            <h1>Chat Grup</h1>
+                            <p id="chatGroupName">RT 01 - Warga</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline" onclick="showChatGroups()" style="padding: 0.5rem;">📋</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <!-- Chat messages will be populated by JavaScript -->
+        </div>
+
+        <div class="chat-input-container">
+            <textarea class="chat-input" id="chatInput" placeholder="Ketik pesan..." rows="1"></textarea>
+            <button class="btn btn-primary" onclick="sendMessage()">📤</button>
+        </div>
+    </div>
+
+    <!-- Donasi Page -->
+    <div class="page" id="donasiPage">
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <div class="logo">💝</div>
+                        <div class="header-text">
+                            <h1>Donasi</h1>
+                            <p>Berbagi untuk sesama</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="showCreateDonation()" id="createDonationBtn" style="display: none; padding: 0.5rem;">➕</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="padding-top: 2rem;">
+            <!-- Active Campaigns -->
+            <div id="donationCampaigns">
+                <div class="card">
+                    <div class="news-image">🏥</div>
+                    <h3>Bantuan Pengobatan Pak Slamet</h3>
+                    <p>Pak Slamet membutuhkan bantuan untuk biaya pengobatan stroke yang dialaminya...</p>
+                    
+                    <div class="donation-progress">
+                        <div class="progress-bar" style="width: 65%;"></div>
+                    </div>
+                    
+                    <div class="donation-stats">
+                        <span><strong>Rp 6.500.000</strong> terkumpul</span>
+                        <span>Target: <strong>Rp 10.000.000</strong></span>
+                    </div>
+                    
+                    <div class="d-flex gap-1 mt-2">
+                        <button class="btn btn-primary" style="flex: 1;" onclick="donate('campaign1')">💰 Donasi</button>
+                        <button class="btn btn-outline" onclick="viewDonationDetail('campaign1')">👁️ Detail</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="news-image">🏫</div>
+                    <h3>Renovasi Mushola Al-Ikhlas</h3>
+                    <p>Mushola Al-Ikhlas membutuhkan renovasi atap dan lantai untuk kenyamanan jamaah...</p>
+                    
+                    <div class="donation-progress">
+                        <div class="progress-bar" style="width: 45%;"></div>
+                    </div>
+                    
+                    <div class="donation-stats">
+                        <span><strong>Rp 9.000.000</strong> terkumpul</span>
+                        <span>Target: <strong>Rp 20.000.000</strong></span>
+                    </div>
+                    
+                    <div class="d-flex gap-1 mt-2">
+                        <button class="btn btn-primary" style="flex: 1;" onclick="donate('campaign2')">💰 Donasi</button>
+                        <button class="btn btn-outline" onclick="viewDonationDetail('campaign2')">👁️ Detail</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aspirasi Page -->
+    <div class="page" id="aspirasiPage">
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <div class="logo">💬</div>
+                        <div class="header-text">
+                            <h1>Aspirasi & Saran</h1>
+                            <p>Suara Anda penting bagi kami</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="padding-top: 2rem;">
+            <!-- Form Aspirasi -->
+            <div class="card">
+                <h3>📝 Kirim Aspirasi Baru</h3>
+                <form id="aspirasiForm">
+                    <div class="form-group">
+                        <label class="form-label">Kategori</label>
+                        <select class="form-select" id="aspirasiCategory" required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="infrastruktur">🏗️ Infrastruktur Desa</option>
+                            <option value="keamanan">🛡️ Keamanan & Ketertiban</option>
+                            <option value="kebersihan">🧹 Kebersihan & Lingkungan</option>
+                            <option value="sosial">🤝 Kegiatan Sosial</option>
+                            <option value="ekonomi">💼 Ekonomi & UMKM</option>
+                            <option value="pendidikan">🎓 Pendidikan</option>
+                            <option value="kesehatan">🏥 Kesehatan</option>
+                            <option value="keagamaan">🕌 Keagamaan</option>
+                            <option value="lainnya">📋 Lainnya</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Judul Aspirasi</label>
+                        <input type="text" class="form-input" id="aspirasiTitle" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Deskripsi Lengkap</label>
+                        <textarea class="form-input" id="aspirasiDescription" rows="5" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Prioritas</label>
+                        <select class="form-select" id="aspirasiPriority" required>
+                            <option value="rendah">🟢 Rendah</option>
+                            <option value="sedang">🟡 Sedang</option>
+                            <option value="tinggi">🔴 Tinggi</option>
+                            <option value="darurat">🚨 Darurat</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">📤 Kirim Aspirasi</button>
+                </form>
+            </div>
+
+            <!-- Status Aspirasi -->
+            <div class="card">
+                <h3>📊 Status Aspirasi Anda</h3>
+                <div id="aspirasiStatus">
+                    <div class="card" style="border-left: 4px solid var(--warning);">
+                        <div class="d-flex justify-between align-center mb-1">
+                            <strong>Perbaikan Jalan RT 02</strong>
+                            <span class="status-badge status-review">Sedang Ditinjau</span>
+                        </div>
+                        <p class="mb-1" style="font-size: 0.875rem; color: var(--text-secondary);">
+                            Jalan di depan rumah Pak Budi berlubang dan berbahaya...
+                        </p>
+                        <small class="text-secondary">Dikirim: 5 hari lalu</small>
+                    </div>
+
+                    <div class="card" style="border-left: 4px solid var(--success);">
+                        <div class="d-flex justify-between align-center mb-1">
+                            <strong>Penambahan Lampu Jalan</strong>
+                            <span class="status-badge status-done">Selesai</span>
+                        </div>
+                        <p class="mb-1" style="font-size: 0.875rem; color: var(--text-secondary);">
+                            Perlu penambahan lampu jalan di gang sebelah timur...
+                        </p>
+                        <small class="text-secondary">Selesai: 2 minggu lalu</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div class="page" id="profilePage">
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <div class="logo">👤</div>
+                        <div class="header-text">
+                            <h1>Profil Saya</h1>
+                            <p>Kelola informasi akun Anda</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="padding-top: 2rem;">
+            <!-- Profile Info -->
+            <div class="card text-center">
+                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">
+                    👤
+                </div>
+                <h2 id="profileName">User Name</h2>
+                <div class="user-badge" id="profileBadge" style="margin: 0 auto 1rem;">
+                    <span>👥</span>
+                    <span>Warga</span>
+                </div>
+                <p id="profilePhone">+62812345678</p>
+            </div>
+
+            <!-- Profile Details -->
+            <div class="card">
+                <h3>📋 Informasi Personal</h3>
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" class="form-input" id="editName" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">RT</label>
+                    <input type="text" class="form-input" id="editRT" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Alamat</label>
+                    <textarea class="form-input" id="editAddress" rows="3" readonly></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Pekerjaan</label>
+                    <input type="text" class="form-input" id="editJob">
+                </div>
+                
+                <div class="d-flex gap-1">
+                    <button class="btn btn-primary" onclick="editProfile()">✏️ Edit</button>
+                    <button class="btn btn-outline" onclick="saveProfile()" style="display: none;" id="saveProfileBtn">💾 Simpan</button>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="card">
+                <h3>📊 Aktivitas Saya</h3>
+                <div class="grid grid-2">
+                    <div class="text-center">
+                        <h3 style="color: var(--primary-green);">3</h3>
+                        <p class="mb-0">Aspirasi Dikirim</p>
+                    </div>
+                    <div class="text-center">
+                        <h3 style="color: var(--secondary-blue);">12</h3>
+                        <p class="mb-0">Kegiatan Diikuti</p>
+                    </div>
+                    <div class="text-center">
+                        <h3 style="color: var(--success);">Rp 250K</h3>
+                        <p class="mb-0">Total Donasi</p>
+                    </div>
+                    <div class="text-center">
+                        <h3 style="color: var(--warning);">156</h3>
+                        <p class="mb-0">Pesan Chat</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="card">
+                <h3>⚙️ Pengaturan</h3>
+                <div class="form-group">
+                    <label class="d-flex justify-between align-center">
+                        <span>Notifikasi Push</span>
+                        <input type="checkbox" id="notificationToggle" checked>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label class="d-flex justify-between align-center">
+                        <span>Mode Gelap</span>
+                        <input type="checkbox" id="darkModeToggle">
+                    </label>
+                </div>
+                
+                <button class="btn btn-outline btn-block" onclick="changePassword()">🔐 Ganti Password</button>
+                <button class="btn btn-danger btn-block" onclick="logout()">🚪 Keluar</button>
+            </div>
+
+            <!-- About -->
+            <div class="card">
+                <h3>ℹ️ Tentang Aplikasi</h3>
+                <p>Aplikasi Padukuhan Pijenan adalah platform digital untuk meningkatkan komunikasi dan partisipasi warga dalam kehidupan bermasyarakat.</p>
+                
+                <div class="mt-2">
+                    <h4>Fitur Utama:</h4>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li>Sistem berita dan informasi</li>
+                        <li>Chat grup berdasarkan hirarki</li>
+                        <li>Sistem donasi transparan</li>
+                        <li>Platform aspirasi warga</li>
+                        <li>Manajemen kegiatan desa</li>
+                    </ul>
+                    
+                    <p style="text-align: center; margin-top: 2rem; padding: 1rem; background: linear-gradient(135deg, var(--primary-green-light), var(--primary-green)); color: white; border-radius: 8px;">
+                        <strong>Dikembangkan oleh:<br>ELRICO FEBRIAN</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="emergencyFab" onclick="emergency()">🚨</button>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showPage('dashboardPage')">
+            <div class="nav-icon">🏠</div>
+            <span>Beranda</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('beritaPage')">
+            <div class="nav-icon">📰</div>
+            <span>Berita</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('chatPage')">
+            <div class="nav-icon">💭</div>
+            <span>Chat</span>
+            <div class="notification-badge" style="display: none;" id="chatNotification">3</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('donasiPage')">
+            <div class="nav-icon">💝</div>
+            <span>Donasi</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('profilePage')">
+            <div class="nav-icon">👤</div>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <!-- Modal for Create News -->
+    <div class="modal" id="createNewsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📝 Buat Berita Baru</h3>
+                <button class="close-modal" onclick="closeModal('createNewsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createNewsForm">
+                    <div class="form-group">
+                        <label class="form-label">Kategori</label>
+                        <select class="form-select" id="newNewsCategory" required>
+                            <option value="kebijakan">🏛️ Kebijakan Pemerintah</option>
+                            <option value="kondisi_negara">🇮🇩 Kondisi Negara</option>
+                            <option value="rencana_negara">🏗️ Rencana Pembangunan</option>
+                            <option value="cuaca">🌤️ Prakiraan Cuaca</option>
+                            <option value="himbauan">⚠️ Himbauan Penting</option>
+                            <option value="acara">📅 Info Acara/Kegiatan</option>
+                            <option value="keagamaan">🕌 Informasi Keagamaan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Judul</label>
+                        <input type="text" class="form-input" id="newNewsTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Konten</label>
+                        <textarea class="form-input" id="newNewsContent" rows="8" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="newNewsUrgent"> Berita Penting/Mendesak
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('createNewsModal')">Batal</button>
+                <button class="btn btn-primary" onclick="submitNews()">📤 Publikasikan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Donation -->
+    <div class="modal" id="donationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💰 Donasi</h3>
+                <button class="close-modal" onclick="closeModal('donationModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="donationForm">
+                    <div class="form-group">
+                        <label class="form-label">Jumlah Donasi</label>
+                        <select class="form-select" id="donationAmount">
+                            <option value="25000">Rp 25.000</option>
+                            <option value="50000">Rp 50.000</option>
+                            <option value="100000">Rp 100.000</option>
+                            <option value="250000">Rp 250.000</option>
+                            <option value="500000">Rp 500.000</option>
+                            <option value="custom">Jumlah lain...</option>
+                        </select>
+                        <input type="number" class="form-input mt-1" id="customAmount" placeholder="Masukkan jumlah..." style="display: none;">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Metode Pembayaran</label>
+                        <select class="form-select" id="paymentMethod" required>
+                            <option value="">Pilih Metode</option>
+                            <option value="bank">🏦 Transfer Bank</option>
+                            <option value="dana">📱 DANA</option>
+                            <option value="ovo">🅾️ OVO</option>
+                            <option value="gopay">🟢 GoPay</option>
+                            <option value="cash">💵 Cash</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Pesan (Opsional)</label>
+                        <textarea class="form-input" id="donationMessage" rows="3" placeholder="Tambahkan pesan dukungan..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="donationAnonymous"> Donasi sebagai Anonim
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('donationModal')">Batal</button>
+                <button class="btn btn-primary" onclick="processDonation()">💳 Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container">
+            <p class="copyright">
+                &copy; 2024 Aplikasi Padukuhan Pijenan<br>
+                <strong>Dikembangkan oleh: ELRICO FEBRIAN</strong>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Application State
+        let currentUser = null;
+        let currentPage = 'loginPage';
+        let newsData = [];
+        let donationData = [];
+        let aspirasiData = [];
+        let chatMessages = [];
+
+        // User Levels Configuration
+        const USER_LEVELS = {
+            1: {
+                title: 'Kepala Padukuhan',
+                permissions: ['manage_all_users', 'create_news', 'manage_donations', 'view_all_aspirations', 'admin_panel', 'chat_all_levels', 'moderate_all'],
+                badge: '👑',
+                color: '#D32F2F'
+            },
+            2: {
+                title: 'Pengurus Karang Taruna',
+                subtypes: {
+                    '2a': 'Ketua Karang Taruna',
+                    '2b': 'Wakil Ketua Karang Taruna',
+                    '2c': 'Sekretaris Karang Taruna',
+                    '2d': 'Bendahara Karang Taruna',
+                    '2e': 'Koordinator Olahraga',
+                    '2f': 'Koordinator Kesenian',
+                    '2g': 'Koordinator Lingkungan',
+                    '2h': 'Koordinator Ekonomi Kreatif'
+                },
+                permissions: ['create_news', 'manage_events', 'moderate_chat', 'view_aspirations', 'chat_level_2_to_5'],
+                badge: '⭐',
+                color: '#1976D2'
+            },
+            3: {
+                title: 'Kader Desa',
+                subtypes: {
+                    '3a': 'Kader Kesehatan (Posyandu)',
+                    '3b': 'Kader PKK',
+                    '3c': 'Kader Keamanan (Ronda)',
+                    '3d': 'Kader Lingkungan',
+                    '3e': 'Kader Pendidikan'
+                },
+                permissions: ['create_announcements', 'moderate_comments', 'chat_level_3_to_5'],
+                badge: '🛡️',
+                color: '#388E3C'
+            },
+            4: {
+                title: 'Ketua RT',
+                subtypes: {
+                    '4a': 'Ketua RT 01',
+                    '4b': 'Ketua RT 02', 
+                    '4c': 'Ketua RT 03',
+                    '4d': 'Ketua RT 04',
+                    '4e': 'Ketua RT 05',
+                    '4f': 'Ketua RT 06'
+                },
+                permissions: ['manage_rt_members', 'create_rt_announcements', 'chat_own_rt_and_level_4'],
+                badge: '📋',
+                color: '#F57C00'
+            },
+            5: {
+                title: 'Warga',
+                permissions: ['view_news', 'send_aspirations', 'vote_only'],
+                voting_emojis: {
+                    '👍': 'Setuju/Mendukung',
+                    '👎': 'Tidak Setuju',
+                    '❤️': 'Sangat Mendukung', 
+                    '🤔': 'Perlu Dipikir Ulang',
+                    '❓': 'Butuh Penjelasan Lebih',
+                    '🙏': 'Terima Kasih Info',
+                    '⚠️': 'Perlu Perhatian Khusus',
+                    '🔥': 'Sangat Penting',
+                    '💡': 'Ada Ide Tambahan'
+                },
+                badge: '👥',
+                color: '#757575'
+            }
+        };
+
+        // News Categories
+        const NEWS_CATEGORIES = {
+            'kebijakan': { name: 'Kebijakan Pemerintah', icon: '🏛️', color: '#1976D2' },
+            'kondisi_negara': { name: 'Kondisi Negara', icon: '🇮🇩', color: '#D32F2F' },
+            'rencana_negara': { name: 'Rencana Pembangunan', icon: '🏗️', color: '#388E3C' },
+            'cuaca': { name: 'Prakiraan Cuaca', icon: '🌤️', color: '#0288D1' },
+            'himbauan': { name: 'Himbauan Penting', icon: '⚠️', color: '#F57C00' },
+            'acara': { name: 'Info Acara/Kegiatan', icon: '📅', color: '#7B1FA2' },
+            'keagamaan': { name: 'Informasi Keagamaan', icon: '🕌', color: '#00796B' }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            showSplashScreen();
+            loadSampleData();
+            initializeEventListeners();
+            
+            // Check if user is logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                setTimeout(() => {
+                    hideSplashScreen();
+                    showDashboard();
+                }, 2000);
+            } else {
+                setTimeout(() => {
+                    hideSplashScreen();
+                    showPage('loginPage');
+                }, 2000);
+            }
+        });
+
+        // Splash Screen Functions
+        function showSplashScreen() {
+            document.getElementById('splashScreen').style.display = 'flex';
+        }
+
+        function hideSplashScreen() {
+            document.getElementById('splashScreen').style.display = 'none';
+        }
+
+        // Page Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Hide navigation for certain pages
+            const bottomNav = document.querySelector('.bottom-nav');
+            const fab = document.getElementById('emergencyFab');
+            
+            if (pageId === 'loginPage' || pageId === 'registerPage') {
+                bottomNav.style.display = 'none';
+                fab.style.display = 'none';
+            } else {
+                bottomNav.style.display = 'flex';
+                fab.style.display = 'block';
+            }
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            currentPage = pageId;
+            
+            // Update navigation active state
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            // Set active nav based on page
+            if (pageId === 'dashboardPage') {
+                navItems[0].classList.add('active');
+            } else if (pageId === 'beritaPage') {
+                navItems[1].classList.add('active');
+                loadNews();
+            } else if (pageId === 'chatPage') {
+                navItems[2].classList.add('active');
+                loadChatMessages();
+            } else if (pageId === 'donasiPage') {
+                navItems[3].classList.add('active');
+                loadDonations();
+            } else if (pageId === 'profilePage') {
+                navItems[4].classList.add('active');
+                loadProfile();
+            }
+            
+            // Load page specific data
+            updatePagePermissions();
+        }
+
+        // Authentication Functions
+        function showLogin() {
+            showPage('loginPage');
+        }
+
+        function showRegister() {
+            showPage('registerPage');
+        }
+
+        function showDashboard() {
+            showPage('dashboardPage');
+            updateUserDisplay();
+            loadDashboardData();
+        }
+
+        // Login Handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('loginPhone').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simple demo login - in real app, this would be API call
+            if (phone && password) {
+                currentUser = {
+                    id: 'user_' + Date.now(),
+                    phone: phone,
+                    name: 'Demo User',
+                    level: 5, // Default to Warga
+                    rt_number: '01',
+                    address: 'Jl. Contoh No. 123, RT 01, Padukuhan Pijenan',
+                    job: 'Swasta',
+                    created_at: new Date().toISOString()
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                showDashboard();
+                showNotification('Login berhasil! Selamat datang di Padukuhan Pijenan', 'success');
+            }
+        });
+
+        // Register Handler
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            currentUser = {
+                id: 'user_' + Date.now(),
+                phone: document.getElementById('regPhone').value,
+                name: document.getElementById('regName').value,
+                level: 5, // New users default to Warga
+                rt_number: document.getElementById('regRT').value,
+                address: document.getElementById('regAddress').value,
+                birth_date: document.getElementById('regBirthDate').value,
+                gender: document.getElementById('regGender').value,
+                job: document.getElementById('regJob').value,
+                created_at: new Date().toISOString()
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            showDashboard();
+            showNotification('Registrasi berhasil! Akun Anda telah dibuat', 'success');
+        });
+
+        // User Display Functions
+        function updateUserDisplay() {
+            if (!currentUser) return;
+            
+            // Update header
+            document.getElementById('userNameDisplay').textContent = currentUser.name;
+            
+            // Update user badge
+            const userLevel = USER_LEVELS[currentUser.level];
+            const badge = document.getElementById('userBadge');
+            badge.innerHTML = `<span>${userLevel.badge}</span><span>${userLevel.title}</span>`;
+            badge.style.backgroundColor = userLevel.color;
+        }
+
+        function updatePagePermissions() {
+            if (!currentUser) return;
+            
+            const userLevel = USER_LEVELS[currentUser.level];
+            const permissions = userLevel.permissions;
+            
+            // Show/hide create news button
+            const createNewsBtn = document.getElementById('createNewsBtn');
+            if (permissions.includes('create_news') || permissions.includes('manage_all_users')) {
+                createNewsBtn.style.display = 'block';
+            }
+            
+            // Show/hide create donation button
+            const createDonationBtn = document.getElementById('createDonationBtn');
+            if (permissions.includes('manage_donations') || permissions.includes('manage_all_users')) {
+                createDonationBtn.style.display = 'block';
+            }
+        }
+
+        // Load Sample Data
+        function loadSampleData() {
+            // Sample news data
+            newsData = [
+                {
+                    id: 'news1',
+                    title: 'Program Bantuan Sosial Tahun 2024',
+                    excerpt: 'Pemerintah meluncurkan program bantuan sosial untuk meningkatkan kesejahteraan masyarakat...',
+                    content: 'Program bantuan sosial tahun 2024 telah resmi diluncurkan oleh pemerintah daerah. Program ini mencakup bantuan pangan, bantuan tunai, dan program pelatihan keterampilan untuk masyarakat kurang mampu.',
+                    category: 'kebijakan',
+                    author: 'Kepala Padukuhan',
+                    author_level: 1,
+                    created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                    view_count: 45,
+                    is_urgent: true
+                },
+                {
+                    id: 'news2',
+                    title: 'Gotong Royong Membersihkan Selokan',
+                    excerpt: 'Mari bergotong royong membersihkan selokan di sekitar padukuhan pada hari Minggu...',
+                    content: 'Dalam rangka menjaga kebersihan lingkungan, seluruh warga diundang untuk bergotong royong membersihkan selokan pada hari Minggu, 15 Desember 2024 pukul 07.00 WIB.',
+                    category: 'acara',
+                    author: 'Koordinator Lingkungan',
+                    author_level: 2,
+                    created_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+                    view_count: 23
+                },
+                {
+                    id: 'news3',
+                    title: 'Prakiraan Cuaca Minggu Ini',
+                    excerpt: 'Berdasarkan info BMKG, cuaca minggu ini diprediksi hujan ringan hingga sedang...',
+                    content: 'BMKG memprediksi cuaca minggu ini akan didominasi hujan ringan hingga sedang. Warga diimbau untuk selalu membawa payung dan berhati-hati saat berkendara.',
+                    category: 'cuaca',
+                    author: 'Tim Informasi',
+                    author_level: 3,
+                    created_at: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+                    view_count: 67
+                }
+            ];
+
+            // Sample donation data
+            donationData = [
+                {
+                    id: 'donation1',
+                    title: 'Bantuan Pengobatan Pak Slamet',
+                    description: 'Pak Slamet membutuhkan bantuan untuk biaya pengobatan stroke yang dialaminya. Mari kita bantu dengan ikhlas.',
+                    target: 10000000,
+                    collected: 6500000,
+                    donors: 45,
+                    created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                    deadline: new Date(Date.now() + 23 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 'donation2',
+                    title: 'Renovasi Mushola Al-Ikhlas',
+                    description: 'Mushola Al-Ikhlas membutuhkan renovasi atap dan lantai untuk kenyamanan jamaah dalam beribadah.',
+                    target: 20000000,
+                    collected: 9000000,
+                    donors: 67,
+                    created_at: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+                    deadline: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+
+            // Sample chat messages
+            chatMessages = [
+                {
+                    id: 'msg1',
+                    sender: 'Ketua RT 01',
+                    sender_level: 4,
+                    message: 'Selamat pagi warga RT 01. Jangan lupa gotong royong hari Minggu ya!',
+                    timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+                    type: 'received'
+                },
+                {
+                    id: 'msg2',
+                    sender: 'Budi Santoso',
+                    sender_level: 5,
+                    message: 'Siap Pak RT! Jam berapa mulainya?',
+                    timestamp: new Date(Date.now() - 2.5 * 60 * 60 * 1000).toISOString(),
+                    type: 'received'
+                },
+                {
+                    id: 'msg3',
+                    sender: 'Ketua RT 01',
+                    sender_level: 4,
+                    message: 'Jam 7 pagi ya. Terima kasih partisipasinya!',
+                    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                    type: 'received'
+                }
+            ];
+        }
+
+        // News Functions
+        function loadNews() {
+            const newsList = document.getElementById('newsList');
+            const searchTerm = document.getElementById('newsSearch').value.toLowerCase();
+            const filterCategory = document.getElementById('newsFilter').value;
+            
+            let filteredNews = newsData;
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredNews = filteredNews.filter(news => 
+                    news.title.toLowerCase().includes(searchTerm) ||
+                    news.excerpt.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Apply category filter
+            if (filterCategory) {
+                filteredNews = filteredNews.filter(news => news.category === filterCategory);
+            }
+            
+            // Sort by urgency and date
+            filteredNews.sort((a, b) => {
+                if (a.is_urgent && !b.is_urgent) return -1;
+                if (!a.is_urgent && b.is_urgent) return 1;
+                return new Date(b.created_at) - new Date(a.created_at);
+            });
+            
+            newsList.innerHTML = '';
+            
+            if (filteredNews.length === 0) {
+                newsList.innerHTML = '<div class="card text-center"><p>Tidak ada berita ditemukan</p></div>';
+                return;
+            }
+            
+            filteredNews.forEach(news => {
+                const categoryInfo = NEWS_CATEGORIES[news.category];
+                const timeAgo = getTimeAgo(news.created_at);
+                const urgentBadge = news.is_urgent ? '<span class="status-badge" style="background: var(--error); margin-left: 0.5rem;">PENTING</span>' : '';
+                
+                const newsCard = `
+                    <div class="news-card fade-in">
+                        <div class="news-image">${categoryInfo.icon}</div>
+                        <div class="news-content">
+                            <div class="news-category" style="background-color: ${categoryInfo.color};">
+                                ${categoryInfo.name}
+                            </div>
+                            ${urgentBadge}
+                            <h4 class="news-title">${news.title}</h4>
+                            <p class="news-excerpt">${news.excerpt}</p>
+                            <div class="news-meta">
+                                <span>${USER_LEVELS[news.author_level].badge} ${news.author}</span>
+                                <span>${timeAgo}</span>
+                                <span>👁️ ${news.view_count}</span>
+                            </div>
+                            <div class="mt-1">
+                                <button class="btn btn-outline" onclick="readNews('${news.id}')">Baca Selengkapnya</button>
+                                ${currentUser && USER_LEVELS[currentUser.level].permissions.includes('vote_only') ? renderVotingButtons() : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                newsList.innerHTML += newsCard;
+            });
+        }
+
+        function renderVotingButtons() {
+            const emojis = USER_LEVELS[5].voting_emojis;
+            let buttons = '<div class="d-flex gap-1 mt-1" style="flex-wrap: wrap;">';
+            
+            Object.keys(emojis).slice(0, 5).forEach(emoji => {
+                buttons += `<button class="btn" style="padding: 0.25rem 0.5rem; font-size: 1rem;" onclick="voteNews('${emoji}')" title="${emojis[emoji]}">${emoji}</button>`;
+            });
+            
+            buttons += '</div>';
+            return buttons;
+        }
+
+        function showCreateNews() {
+            document.getElementById('createNewsModal').classList.add('active');
+        }
+
+        function submitNews() {
+            const category = document.getElementById('newNewsCategory').value;
+            const title = document.getElementById('newNewsTitle').value;
+            const content = document.getElementById('newNewsContent').value;
+            const isUrgent = document.getElementById('newNewsUrgent').checked;
+            
+            if (!title || !content) {
+                showNotification('Harap isi semua field yang diperlukan', 'error');
+                return;
+            }
+            
+            const newNews = {
+                id: 'news_' + Date.now(),
+                title: title,
+                excerpt: content.substring(0, 100) + '...',
+                content: content,
+                category: category,
+                author: currentUser.name,
+                author_level: currentUser.level,
+                created_at: new Date().toISOString(),
+                view_count: 0,
+                is_urgent: isUrgent
+            };
+            
+            newsData.unshift(newNews);
+            closeModal('createNewsModal');
+            loadNews();
+            showNotification('Berita berhasil dipublikasikan!', 'success');
+            
+            // Reset form
+            document.getElementById('createNewsForm').reset();
+        }
+
+        function readNews(newsId) {
+            const news = newsData.find(n => n.id === newsId);
+            if (news) {
+                news.view_count++;
+                showNotification(`Membuka: ${news.title}`, 'info');
+                // In a real app, this would open a detailed view
+            }
+        }
+
+        function voteNews(emoji) {
+            showNotification(`Anda memilih ${emoji} untuk berita ini`, 'info');
+        }
+
+        // Chat Functions
+        function loadChatMessages() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.innerHTML = '';
+            
+            chatMessages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${msg.type}`;
+                
+                const bubble = document.createElement('div');
+                bubble.className = `message-bubble ${msg.type}`;
+                bubble.textContent = msg.message;
+                
+                const info = document.createElement('div');
+                info.className = 'message-info';
+                info.innerHTML = `${USER_LEVELS[msg.sender_level].badge} ${msg.sender} • ${getTimeAgo(msg.timestamp)}`;
+                
+                messageDiv.appendChild(bubble);
+                messageDiv.appendChild(info);
+                chatContainer.appendChild(messageDiv);
+            });
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            const newMessage = {
+                id: 'msg_' + Date.now(),
+                sender: currentUser.name,
+                sender_level: currentUser.level,
+                message: message,
+                timestamp: new Date().toISOString(),
+                type: 'sent'
+            };
+            
+            chatMessages.push(newMessage);
+            input.value = '';
+            loadChatMessages();
+        }
+
+        function showChatGroups() {
+            showNotification('Fitur pemilihan grup chat akan segera tersedia', 'info');
+        }
+
+        // Donation Functions
+        function loadDonations() {
+            // Donations are already loaded in the HTML template
+            // This function could fetch updated data from server
+        }
+
+        function donate(campaignId) {
+            document.getElementById('donationModal').classList.add('active');
+            
+            // Handle custom amount selection
+            document.getElementById('donationAmount').addEventListener('change', function() {
+                const customInput = document.getElementById('customAmount');
+                if (this.value === 'custom') {
+                    customInput.style.display = 'block';
+                    customInput.required = true;
+                } else {
+                    customInput.style.display = 'none';
+                    customInput.required = false;
+                }
+            });
+        }
+
+        function processDonation() {
+            const amount = document.getElementById('donationAmount').value;
+            const customAmount = document.getElementById('customAmount').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const message = document.getElementById('donationMessage').value;
+            const isAnonymous = document.getElementById('donationAnonymous').checked;
+            
+            if (!paymentMethod) {
+                showNotification('Pilih metode pembayaran', 'error');
+                return;
+            }
+            
+            const donationAmount = amount === 'custom' ? customAmount : amount;
+            
+            closeModal('donationModal');
+            showNotification(`Terima kasih! Donasi Rp ${parseInt(donationAmount).toLocaleString('id-ID')} akan diproses`, 'success');
+            
+            // Reset form
+            document.getElementById('donationForm').reset();
+            document.getElementById('customAmount').style.display = 'none';
+        }
+
+        function viewDonationDetail(campaignId) {
+            showNotification('Detail donasi akan segera tersedia', 'info');
+        }
+
+        function showCreateDonation() {
+            showNotification('Fitur buat kampanye donasi akan segera tersedia', 'info');
+        }
+
+        // Aspirasi Functions
+        document.getElementById('aspirasiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const category = document.getElementById('aspirasiCategory').value;
+            const title = document.getElementById('aspirasiTitle').value;
+            const description = document.getElementById('aspirasiDescription').value;
+            const priority = document.getElementById('aspirasiPriority').value;
+            
+            const newAspirasi = {
+                id: 'aspirasi_' + Date.now(),
+                category: category,
+                title: title,
+                description: description,
+                priority: priority,
+                author: currentUser.name,
+                author_id: currentUser.id,
+                status: 'new',
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+            
+            // Add to aspirasi data
+            if (!aspirasiData) aspirasiData = [];
+            aspirasiData.unshift(newAspirasi);
+            
+            // Save to storage
+            saveToStorage('aspirasi_data', aspirasiData);
+            
+            showNotification('Aspirasi berhasil dikirim! Terima kasih atas partisipasinya', 'success');
+            this.reset();
+            loadAspirasiStatus();
+        });
+
+        function loadAspirasiStatus() {
+            const statusContainer = document.getElementById('aspirasiStatus');
+            if (!aspirasiData || aspirasiData.length === 0) {
+                statusContainer.innerHTML = '<div class="card text-center"><p>Belum ada aspirasi yang dikirim</p></div>';
+                return;
+            }
+            
+            const userAspirations = aspirasiData.filter(asp => asp.author_id === currentUser.id);
+            statusContainer.innerHTML = '';
+            
+            userAspirations.forEach(aspirasi => {
+                const statusClass = getStatusClass(aspirasi.status);
+                const statusText = getStatusText(aspirasi.status);
+                const timeAgo = getTimeAgo(aspirasi.created_at);
+                
+                const card = `
+                    <div class="card" style="border-left: 4px solid ${getStatusColor(aspirasi.status)};">
+                        <div class="d-flex justify-between align-center mb-1">
+                            <strong>${aspirasi.title}</strong>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                        <p class="mb-1" style="font-size: 0.875rem; color: var(--text-secondary);">
+                            ${aspirasi.description.substring(0, 100)}...
+                        </p>
+                        <div class="d-flex justify-between align-center">
+                            <small class="text-secondary">Dikirim: ${timeAgo}</small>
+                            <small class="text-secondary">Prioritas: ${getPriorityIcon(aspirasi.priority)} ${aspirasi.priority}</small>
+                        </div>
+                    </div>
+                `;
+                statusContainer.innerHTML += card;
+            });
+        }
+
+        // Profile Functions
+        function loadProfile() {
+            if (!currentUser) return;
+            
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('profilePhone').textContent = currentUser.phone;
+            
+            const profileBadge = document.getElementById('profileBadge');
+            const userLevel = USER_LEVELS[currentUser.level];
+            profileBadge.innerHTML = `<span>${userLevel.badge}</span><span>${userLevel.title}</span>`;
+            profileBadge.style.backgroundColor = userLevel.color;
+            
+            // Fill form fields
+            document.getElementById('editName').value = currentUser.name || '';
+            document.getElementById('editRT').value = `RT ${currentUser.rt_number}` || '';
+            document.getElementById('editAddress').value = currentUser.address || '';
+            document.getElementById('editJob').value = currentUser.job || '';
+        }
+
+        function editProfile() {
+            const inputs = ['editJob'];
+            inputs.forEach(id => {
+                document.getElementById(id).readOnly = false;
+                document.getElementById(id).style.borderColor = 'var(--primary-green)';
+            });
+            
+            document.getElementById('saveProfileBtn').style.display = 'inline-flex';
+            showNotification('Mode edit diaktifkan', 'info');
+        }
+
+        function saveProfile() {
+            currentUser.job = document.getElementById('editJob').value;
+            currentUser.updated_at = new Date().toISOString();
+            
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            const inputs = ['editJob'];
+            inputs.forEach(id => {
+                document.getElementById(id).readOnly = true;
+                document.getElementById(id).style.borderColor = 'var(--divider)';
+            });
+            
+            document.getElementById('saveProfileBtn').style.display = 'none';
+            showNotification('Profil berhasil diperbarui', 'success');
+        }
+
+        function changePassword() {
+            showNotification('Fitur ganti password akan segera tersedia', 'info');
+        }
+
+        function logout() {
+            if (confirm('Yakin ingin keluar dari aplikasi?')) {
+                localStorage.removeItem('currentUser');
+                currentUser = null;
+                showPage('loginPage');
+                showNotification('Anda telah keluar dari aplikasi', 'info');
+            }
+        }
+
+        // Dashboard Functions
+        function loadDashboardData() {
+            updateQuickStats();
+            loadLatestNews();
+            loadUpcomingEvents();
+        }
+
+        function updateQuickStats() {
+            // Update stats based on actual data
+            const newsCount = newsData.length;
+            const eventsCount = getUpcomingEventsCount();
+            
+            // Update the stats in dashboard
+            const statsElements = document.querySelectorAll('.card h3');
+            if (statsElements.length >= 2) {
+                statsElements[0].textContent = newsCount;
+                statsElements[1].textContent = eventsCount;
+            }
+        }
+
+        function loadLatestNews() {
+            const latestNewsContainer = document.getElementById('latestNews');
+            if (newsData.length > 0) {
+                const latest = newsData[0];
+                const categoryInfo = NEWS_CATEGORIES[latest.category];
+                const timeAgo = getTimeAgo(latest.created_at);
+                
+                latestNewsContainer.innerHTML = `
+                    <div class="news-card">
+                        <div class="news-image">${categoryInfo.icon}</div>
+                        <div class="news-content">
+                            <div class="news-category" style="background-color: ${categoryInfo.color};">
+                                ${categoryInfo.name}
+                            </div>
+                            <h4 class="news-title">${latest.title}</h4>
+                            <p class="news-excerpt">${latest.excerpt}</p>
+                            <div class="news-meta">
+                                <span>${USER_LEVELS[latest.author_level].badge} ${latest.author}</span>
+                                <span>${timeAgo}</span>
+                                <span>👁️ ${latest.view_count}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function loadUpcomingEvents() {
+            // Sample upcoming events - in real app this would come from database
+            const events = [
+                {
+                    title: 'Gotong Royong RT 01',
+                    date: 'Minggu, 15 Des 2024 - 07:00',
+                    participants: 15
+                },
+                {
+                    title: 'Rapat RT 02',
+                    date: 'Senin, 16 Des 2024 - 19:00',
+                    participants: 8
+                }
+            ];
+            
+            // Events are already in HTML template
+        }
+
+        function getUpcomingEventsCount() {
+            return 12; // Sample count
+        }
+
+        // Emergency Functions
+        function emergency() {
+            if (confirm('Ini adalah tombol darurat. Yakin ingin mengirim sinyal emergency?')) {
+                showNotification('🚨 Sinyal darurat telah dikirim ke petugas terkait', 'error');
+                
+                // In real app, this would:
+                // 1. Send location to authorities
+                // 2. Alert community leaders
+                // 3. Log the emergency event
+                
+                // Simulate emergency response
+                setTimeout(() => {
+                    showNotification('📞 Petugas darurat akan segera menghubungi Anda', 'info');
+                }, 3000);
+            }
+        }
+
+        // Utility Functions
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const past = new Date(timestamp);
+            const diffMs = now - past;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Baru saja';
+            if (diffMins < 60) return `${diffMins} menit lalu`;
+            if (diffHours < 24) return `${diffHours} jam lalu`;
+            if (diffDays < 7) return `${diffDays} hari lalu`;
+            
+            return past.toLocaleDateString('id-ID', { 
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric' 
+            });
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                'new': 'status-new',
+                'review': 'status-review',
+                'process': 'status-process',
+                'done': 'status-done',
+                'rejected': 'status-rejected'
+            };
+            return classes[status] || 'status-new';
+        }
+
+        function getStatusText(status) {
+            const texts = {
+                'new': 'Baru Masuk',
+                'review': 'Sedang Ditinjau',
+                'process': 'Dalam Proses',
+                'done': 'Selesai',
+                'rejected': 'Ditolak'
+            };
+            return texts[status] || 'Baru Masuk';
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'new': 'var(--info)',
+                'review': 'var(--warning)',
+                'process': 'var(--secondary-blue)',
+                'done': 'var(--success)',
+                'rejected': 'var(--error)'
+            };
+            return colors[status] || 'var(--info)';
+        }
+
+        function getPriorityIcon(priority) {
+            const icons = {
+                'rendah': '🟢',
+                'sedang': '🟡',
+                'tinggi': '🔴',
+                'darurat': '🚨'
+            };
+            return icons[priority] || '🟢';
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 10000;
+                max-width: 300px;
+                word-wrap: break-word;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            // Set background color based on type
+            const colors = {
+                'success': 'var(--success)',
+                'error': 'var(--error)',
+                'warning': 'var(--warning)',
+                'info': 'var(--info)'
+            };
+            notification.style.backgroundColor = colors[type] || colors.info;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Add slide in animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Remove notification after 4 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+            
+            // Add slide out animation
+            style.textContent += `
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+        }
+
+        // Storage Functions
+        function saveToStorage(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch (error) {
+                console.error('Error saving to storage:', error);
+                showNotification('Error menyimpan data', 'error');
+            }
+        }
+
+        function loadFromStorage(key) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : null;
+            } catch (error) {
+                console.error('Error loading from storage:', error);
+                return null;
+            }
+        }
+
+        // Modal Functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Event Listeners
+        function initializeEventListeners() {
+            // Search functionality
+            document.getElementById('newsSearch').addEventListener('input', debounce(loadNews, 300));
+            document.getElementById('newsFilter').addEventListener('change', loadNews);
+            
+            // Chat input auto-resize
+            const chatInput = document.getElementById('chatInput');
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+            });
+            
+            // Chat input enter to send
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Close modal when clicking outside
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Dark mode toggle
+            document.getElementById('darkModeToggle').addEventListener('change', function() {
+                toggleDarkMode(this.checked);
+            });
+            
+            // Notification toggle
+            document.getElementById('notificationToggle').addEventListener('change', function() {
+                toggleNotifications(this.checked);
+            });
+        }
+
+        // Debounce function for search
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Dark Mode
+        function toggleDarkMode(enabled) {
+            if (enabled) {
+                document.body.style.setProperty('--background', '#121212');
+                document.body.style.setProperty('--surface', '#1e1e1e');
+                document.body.style.setProperty('--text-primary', '#ffffff');
+                document.body.style.setProperty('--text-secondary', '#b3b3b3');
+                showNotification('Mode gelap diaktifkan', 'info');
+            } else {
+                document.body.style.setProperty('--background', '#FAFAFA');
+                document.body.style.setProperty('--surface', '#FFFFFF');
+                document.body.style.setProperty('--text-primary', '#212121');
+                document.body.style.setProperty('--text-secondary', '#757575');
+                showNotification('Mode terang diaktifkan', 'info');
+            }
+            
+            localStorage.setItem('darkMode', enabled);
+        }
+
+        // Notification Settings
+        function toggleNotifications(enabled) {
+            if (enabled) {
+                // Request notification permission
+                if ('Notification' in window) {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            showNotification('Notifikasi diaktifkan', 'success');
+                        }
+                    });
+                }
+            } else {
+                showNotification('Notifikasi dinonaktifkan', 'info');
+            }
+            
+            localStorage.setItem('notificationsEnabled', enabled);
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install button
+            const installBtn = document.createElement('button');
+            installBtn.className = 'btn btn-outline';
+            installBtn.innerHTML = '📱 Install App';
+            installBtn.onclick = installPWA;
+            
+            // Add to profile page
+            const profilePage = document.getElementById('profilePage');
+            if (profilePage) {
+                profilePage.querySelector('.container').appendChild(installBtn);
+            }
+        });
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showNotification('Aplikasi berhasil diinstall!', 'success');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // Load saved preferences on startup
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load dark mode preference
+            const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+            document.getElementById('darkModeToggle').checked = savedDarkMode;
+            if (savedDarkMode) {
+                toggleDarkMode(true);
+            }
+            
+            // Load notification preference
+            const savedNotifications = localStorage.getItem('notificationsEnabled') !== 'false';
+            document.getElementById('notificationToggle').checked = savedNotifications;
+            
+            // Load saved data
+            const savedNews = loadFromStorage('news_data');
+            if (savedNews && savedNews.length > 0) {
+                newsData = savedNews;
+            }
+            
+            const savedAspirations = loadFromStorage('aspirasi_data');
+            if (savedAspirations && savedAspirations.length > 0) {
+                aspirasiData = savedAspirations;
+            }
+        });
+
+        // Periodic data sync (simulate real-time updates)
+        setInterval(() => {
+            if (currentUser && currentPage === 'chatPage') {
+                // Simulate receiving new messages
+                if (Math.random() < 0.1) { // 10% chance every 5 seconds
+                    const sampleMessages = [
+                        'Ada info penting nih warga!',
+                        'Jangan lupa kegiatan besok ya',
+                        'Terima kasih atas partisipasinya',
+                        'Siap pak RT!'
+                    ];
+                    
+                    const newMsg = {
+                        id: 'msg_' + Date.now(),
+                        sender: 'Ketua RT 01',
+                        sender_level: 4,
+                        message: sampleMessages[Math.floor(Math.random() * sampleMessages.length)],
+                        timestamp: new Date().toISOString(),
+                        type: 'received'
+                    };
+                    
+                    chatMessages.push(newMsg);
+                    loadChatMessages();
+                    
+                    // Show notification badge
+                    const chatNotification = document.getElementById('chatNotification');
+                    chatNotification.style.display = 'flex';
+                    const currentCount = parseInt(chatNotification.textContent) || 0;
+                    chatNotification.textContent = currentCount + 1;
+                }
+            }
+        }, 5000);
+
+        // Auto-save data periodically
+        setInterval(() => {
+            if (currentUser) {
+                saveToStorage('news_data', newsData);
+                saveToStorage('aspirasi_data', aspirasiData);
+            }
+        }, 30000); // Save every 30 seconds
+        
+    </script> 
+</body>
+</html> 

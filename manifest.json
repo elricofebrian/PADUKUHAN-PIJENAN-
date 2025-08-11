@@ -1,0 +1,134 @@
+{
+  "name": "Aplikasi Padukuhan Pijenan",
+  "short_name": "Padukuhan Pijenan",
+  "description": "Aplikasi digital untuk warga Padukuhan Pijenan - Dikembangkan oleh ELRICO FEBRIAN",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#2E7D32",
+  "theme_color": "#2E7D32",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "id",
+  "dir": "ltr",
+  
+  "icons": [
+    {
+      "src": "assets/images/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Berita Terbaru",
+      "short_name": "Berita",
+      "description": "Lihat berita dan informasi terbaru",
+      "url": "/?page=berita",
+      "icons": [
+        {
+          "src": "assets/images/shortcut-news.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Chat Grup",
+      "short_name": "Chat",
+      "description": "Chat dengan warga lain",
+      "url": "/?page=chat",
+      "icons": [
+        {
+          "src": "assets/images/shortcut-chat.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Kirim Aspirasi",
+      "short_name": "Aspirasi",
+      "description": "Sampaikan aspirasi dan saran",
+      "url": "/?page=aspirasi",
+      "icons": [
+        {
+          "src": "assets/images/shortcut-aspirasi.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Donasi",
+      "short_name": "Donasi",
+      "description": "Berdonasi untuk kegiatan desa",
+      "url": "/?page=donasi",
+      "icons": [
+        {
+          "src": "assets/images/shortcut-donasi.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+
+  "categories": ["social", "utilities", "government"],
+  
+  "prefer_related_applications": false,
+  
+  "screenshots": [
+    {
+      "src": "assets/images/screenshot1.png",
+      "type": "image/png",
+      "sizes": "540x720",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "assets/images/screenshot2.png", 
+      "type": "image/png",
+      "sizes": "540x720",
+      "form_factor": "narrow"
+    }
+  ]
+}

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Padukuhan Pijenan</title>
+    <style>
+        :root {
+            --primary-green: #2E7D32;
+            --primary-green-light: #66BB6A;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --background: #FAFAFA;
+            --surface: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .offline-container {
+            text-align: center;
+            max-width: 400px;
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .offline-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-green);
+        }
+
+        p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-green);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-green-light);
+        }
+
+        .offline-features {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .offline-features h3 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .offline-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .offline-features li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-credit {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .connection-status {
+            margin: 1rem 0;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .connection-offline {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .connection-online {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        @media (max-width: 480px) {
+            .offline-container {
+                padding: 1.5rem;
+                margin: 0 1rem;
+            }
+            
+            .offline-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+            
+            h1 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">🏘️</div>
+        
+        <h1>Aplikasi Offline</h1>
+        
+        <div class="connection-status" id="connectionStatus">
+            <div class="connection-offline">
+                📶 Tidak ada koneksi internet
+            </div>
+        </div>
+        
+        <p>
+            Anda sedang offline, tetapi masih dapat menggunakan beberapa fitur aplikasi Padukuhan Pijenan. 
+            Data yang Anda masukkan akan disinkronkan ketika koneksi kembali tersedia.
+        </p>
+        
+        <button class="btn" onclick="checkConnection()">
+            🔄 Coba Lagi
+        </button>
+        
+        <div class="offline-features">
+            <h3>✨ Fitur yang Tersedia Offline:</h3>
+            <ul>
+                <li>📖 Baca berita yang sudah dibuka sebelumnya</li>
+                <li>💬 Tulis aspirasi (akan dikirim saat online)</li>
+                <li>👤 Lihat dan edit profil</li>
+                <li>📊 Lihat statistik personal</li>
+                <li>⚙️ Pengaturan aplikasi</li>
+            </ul>
+        </div>
+        
+        <div class="footer-credit">
+            <strong>Dikembangkan oleh: ELRICO FEBRIAN</strong><br>
+            Padukuhan Pijenan Digital Platform
+        </div>
+    </div>
+
+    <script>
+        // Check connection status
+        function updateConnectionStatus() {
+            const statusDiv = document.getElementById('connectionStatus');
+            const statusContent = statusDiv.querySelector('div');
+            
+            if (navigator.onLine) {
+                statusContent.className = 'connection-online';
+                statusContent.innerHTML = '📶 Koneksi tersedia - Klik tombol untuk melanjutkan';
+            } else {
+                statusContent.className = 'connection-offline';
+                statusContent.innerHTML = '📶 Tidak ada koneksi internet';
+            }
+        }
+
+        function checkConnection() {
+            updateConnectionStatus();
+            
+            if (navigator.onLine) {
+                // Try to go back to the main app
+                window.location.href = '/';
+            } else {
+                // Show notification that still offline
+                const btn = document.querySelector('.btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '❌ Masih Offline';
+                btn.style.background = '#f44336';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'var(--primary-green)';
+                }, 2000);
+            }
+        }
+
+        // Listen for connection changes
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+
+        // Check connection on load
+        updateConnectionStatus();
+
+        // Auto-check connection every 5 seconds
+        setInterval(updateConnectionStatus, 5000);
+
+        // Service worker communication
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', event => {
+                if (event.data.type === 'CACHE_UPDATED') {
+                    console.log('Cache updated, new content available');
+                    updateConnectionStatus();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
